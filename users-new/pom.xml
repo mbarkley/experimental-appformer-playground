@@ -62,7 +62,7 @@
     <version.org.uberfire>1.0.0-SNAPSHOT</version.org.uberfire>
     <gwt.version>2.8.0-rc1</gwt.version>
     <version.org.gwtbootstrap3>0.9.3</version.org.gwtbootstrap3>
-    <version.org.livespark>0.0.1-SNAPSHOT</version.org.livespark>
+    <version.org.kie.appformer>0.0.1-SNAPSHOT</version.org.kie.appformer>
     <version.org.slf4j>1.7.2</version.org.slf4j>
     <errai.dev.context>${project.artifactId}</errai.dev.context>
     <as.version>10.0.0.Final</as.version>
@@ -350,15 +350,15 @@
     </dependency>
 
     <dependency>
-      <groupId>org.livespark</groupId>
-      <artifactId>livespark-form-modeler-rendering-api</artifactId>
-      <version>${version.org.livespark}</version>
+      <groupId>org.kie.appformer</groupId>
+      <artifactId>app-former-form-modeler-rendering-api</artifactId>
+      <version>${version.org.kie.appformer}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.livespark</groupId>
-      <artifactId>livespark-app-flow-client</artifactId>
-      <version>${version.org.livespark}</version>
+      <groupId>org.kie.appformer</groupId>
+      <artifactId>app-former-flow-client</artifactId>
+      <version>${version.org.kie.appformer}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -400,14 +400,14 @@
           <strict>true</strict>
           <generateJsInteropExports>true</generateJsInteropExports>
           <compileSourcesArtifacts>
-            <!-- LiveSpark -->
+            <!-- AppFormer -->
             <compileSourcesArtifact>org.kie.workbench.forms:kie-wb-common-forms-common-rendering-shared</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.forms:kie-wb-common-forms-common-rendering-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.forms:kie-wb-common-forms-crud-component</compileSourcesArtifact>
-            <compileSourcesArtifact>org.livespark:livespark-form-modeler-rendering-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.livespark:livespark-app-flow-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.livespark:livespark-app-flow-cdi-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.livespark:livespark-app-flow-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:app-former-form-modeler-rendering-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:app-former-flow-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:app-former-flow-cdi-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:app-former-flow-client</compileSourcesArtifact>
           </compileSourcesArtifacts>
         </configuration>
       </plugin>

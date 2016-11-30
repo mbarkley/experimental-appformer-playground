@@ -20,9 +20,9 @@
   <inherits name="org.uberfire.java.nio.UberfireNIO2Model"/>
   <inherits name="org.uberfire.ext.widgets.table.UberfireTableWidget"/>
   <inherits name="org.kie.workbench.common.forms.crud.FormsCRUDWidget"/>
-  <inherits name="org.livespark.formmodeler.rendering.FormModelerRenderingAPI"/>
+  <inherits name="org.kie.appformer.formmodeler.rendering.FormModelerRenderingAPI"/>
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
-  <inherits name='org.livespark.flow.AppFlow'/>
+  <inherits name='org.kie.appformer.flow.AppFlow'/>
 
   <set-property name="gwt.logging.enabled" value="TRUE"/>
   <set-property name="gwt.logging.logLevel" value="ALL"/>
