@@ -351,13 +351,13 @@
 
     <dependency>
       <groupId>org.kie.appformer</groupId>
-      <artifactId>app-former-form-modeler-rendering-api</artifactId>
+      <artifactId>appformer-form-modeler-rendering-api</artifactId>
       <version>${version.org.kie.appformer}</version>
     </dependency>
 
     <dependency>
       <groupId>org.kie.appformer</groupId>
-      <artifactId>app-former-flow-client</artifactId>
+      <artifactId>appformer-flow-client</artifactId>
       <version>${version.org.kie.appformer}</version>
       <scope>provided</scope>
     </dependency>
@@ -404,10 +404,10 @@
             <compileSourcesArtifact>org.kie.workbench.forms:kie-wb-common-forms-common-rendering-shared</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.forms:kie-wb-common-forms-common-rendering-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.forms:kie-wb-common-forms-crud-component</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.appformer:app-former-form-modeler-rendering-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.appformer:app-former-flow-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.appformer:app-former-flow-cdi-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.appformer:app-former-flow-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:appformer-form-modeler-rendering-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:appformer-flow-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:appformer-flow-cdi-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:appformer-flow-client</compileSourcesArtifact>
           </compileSourcesArtifacts>
         </configuration>
       </plugin>
