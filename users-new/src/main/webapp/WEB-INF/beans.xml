@@ -3,12 +3,9 @@
 
   <scan>
     <!-- These exclusions were added by Errai to avoid deploying client-side classes to the server -->
-    <exclude name = "demo.client.local.builtin.Util" />
-    <exclude name = "demo.client.local.builtin.FlowSelection" />
-    <exclude name = "demo.client.local.builtin.FlowPage$1" />
+    <exclude name = "demo.client.local.builtin.FlowCompilerProducer" />
+    <exclude name = "demo.client.local.builtin.FlowLoader" />
     <exclude name = "demo.client.local.builtin.MainPage" />
-    <exclude name = "demo.client.local.builtin.FlowPage$2" />
-    <exclude name = "demo.client.local.builtin.FlowPage" />
     <!-- End of Errai exclusions -->
   </scan>
 </beans>

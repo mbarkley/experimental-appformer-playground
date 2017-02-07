@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Red Hat, Inc. and/or its affiliates.
+ * Copyright (C) 2017 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,11 @@
  */
 
 
-package demo.client.local.builtin;
+package demo.client.shared.builtin;
 
-public abstract class Util {
+import org.jboss.errai.bus.server.annotations.Remote;
 
-    private Util() {}
-
-    public static String simpleName( final String fullyQualifiedClassName ) {
-        return fullyQualifiedClassName.substring( fullyQualifiedClassName.lastIndexOf( '.' ) + 1 );
-    }
-
+@Remote
+public interface FlowService {
+    String getMainFlow();
 }
