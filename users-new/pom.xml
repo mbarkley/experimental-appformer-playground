@@ -418,7 +418,7 @@
         <configuration>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
-          <extraJvmArgs>-Xmx4g -Xms1g -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.dev.context=${errai.dev.context}</extraJvmArgs>
+          <extraJvmArgs>-Xmx4g -Xms1g -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.dev.context=${errai.dev.context} -Duberfire.plugin.mode.active=true</extraJvmArgs>
           <module>demo.App</module>
           <disableCastChecking>true</disableCastChecking>
           <runTarget>${errai.dev.context}/index.jsp</runTarget>
