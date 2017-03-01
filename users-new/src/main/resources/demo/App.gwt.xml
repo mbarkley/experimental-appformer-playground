@@ -16,9 +16,11 @@
   <inherits name="org.jboss.errai.validation.Validation"/>
   <inherits name="org.hibernate.validator.HibernateValidator"/>
   <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
+  <inherits name="org.uberfire.UberfireAPI"/>
   <inherits name="org.uberfire.commons.UberfireCommons"/>
   <inherits name="org.uberfire.java.nio.UberfireNIO2Model"/>
   <inherits name="org.uberfire.ext.widgets.table.UberfireTableWidget"/>
+  <inherits name="org.uberfire.client.views.PatternFlyTheme"/>
   <inherits name="org.kie.workbench.common.forms.crud.FormsCRUDWidget"/>
   <inherits name="org.kie.appformer.formmodeler.rendering.FormModelerRenderingAPI"/>
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
