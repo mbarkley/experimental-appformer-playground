@@ -54,7 +54,7 @@
     </pluginRepository>
   </pluginRepositories>
   <properties>
-    <version.org.kie>7.0.0-SNAPSHOT</version.org.kie>
+    <version.org.kie>7.1.0-SNAPSHOT</version.org.kie>
     <hibernate.validator.version>4.1.0.Final</hibernate.validator.version>
     <hibernate.version>4.2.21.Final</hibernate.version>
     <validation.api.version>1.0.0.GA</validation.api.version>
@@ -204,15 +204,15 @@
       <artifactId>errai-cdi-server</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.jboss.errai</groupId>
-      <artifactId>errai-jaxrs-client</artifactId>
-      <scope>provided</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.jboss.errai</groupId>
       <artifactId>errai-jaxrs-provider</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-jaxrs-client</artifactId>
     </dependency>
 
     <dependency>
@@ -380,6 +380,61 @@
     </dependency>
 
     <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-core-api</artifactId>
+      <version>${version.org.kie}</version>
+      <exclusions>
+       <exclusion>
+        <groupId>org.kie.workbench.forms</groupId>
+        <artifactId>kie-wb-common-forms-adf-engine-api</artifactId>
+       </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-core-common</artifactId>
+      <version>${version.org.kie}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-client-api</artifactId>
+      <version>${version.org.kie}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-client-api</artifactId>
+      <version>${version.org.kie}</version>
+      <classifier>sources</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-core-common</artifactId>
+      <version>${version.org.kie}</version>
+      <scope>provided</scope>
+      <classifier>sources</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-core-api</artifactId>
+      <version>${version.org.kie}</version>
+      <classifier>sources</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-api</artifactId>
+      <version>${version.org.uberfire}</version>
+      <classifier>sources</classifier>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.kie.appformer</groupId>
       <artifactId>appformer-form-modeler-rendering-api</artifactId>
       <version>${version.org.kie.appformer}</version>
@@ -394,8 +449,34 @@
 
     <dependency>
       <groupId>org.kie.appformer</groupId>
-      <artifactId>appformer-flow-lang</artifactId>
+      <artifactId>appformer-stunner-flowset-api</artifactId>
       <version>${version.org.kie.appformer}</version>
+      <exclusions>
+       <exclusion>
+        <groupId>org.uberfire</groupId>
+        <artifactId>uberfire-backend-server</artifactId>
+       </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.appformer</groupId>
+      <artifactId>appformer-stunner-flowset-api</artifactId>
+      <version>${version.org.kie.appformer}</version>
+      <scope>provided</scope>
+      <classifier>sources</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.appformer</groupId>
+      <artifactId>appformer-stunner-flowset-interpreter</artifactId>
+      <version>${version.org.kie.appformer}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.jdt.core.compiler</groupId>
+      <artifactId>ecj</artifactId>
     </dependency>
 
     <dependency>
@@ -429,6 +510,9 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+          <excludes>
+            <exclude>**/.*.java</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -445,14 +529,14 @@
         <configuration>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
-          <extraJvmArgs>-Xmx4g -Xms1g -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.dev.context=${errai.dev.context} -Duberfire.plugin.mode.active=true</extraJvmArgs>
+          <extraJvmArgs>-Xmx4g -Xms1g -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.dev.context=${errai.dev.context} -Duberfire.plugin.mode.active=true -Derrai.marshalling.force_static_marshallers=true</extraJvmArgs>
           <module>demo.App</module>
           <disableCastChecking>true</disableCastChecking>
           <runTarget>${errai.dev.context}/index.jsp</runTarget>
           <soyc>false</soyc>
           <hostedWebapp>src/main/webapp</hostedWebapp>
           <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
-          <strict>true</strict>
+          <strict>false</strict>
           <generateJsInteropExports>true</generateJsInteropExports>
           <compileSourcesArtifacts>
             <!-- AppFormer -->
@@ -462,7 +546,7 @@
             <compileSourcesArtifact>org.kie.appformer:appformer-form-modeler-rendering-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.appformer:appformer-flow-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.appformer:appformer-flow-client</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.appformer:appformer-flow-lang</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.appformer:appformer-stunner-flowset-interpreter</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.appformer:appformer-form-modeler-uploads-runtime-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.appformer:appformer-form-modeler-uploads-runtime-client</compileSourcesArtifact>
           </compileSourcesArtifacts>

@@ -17,9 +17,20 @@
 
 package demo.client.shared.builtin;
 
-import org.jboss.errai.bus.server.annotations.Remote;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
-@Remote
+import org.kie.workbench.common.stunner.core.graph.Graph;
+import org.kie.workbench.common.stunner.core.graph.Node;
+
+@Path("flow")
 public interface FlowService {
-    String getMainFlow();
+
+    @Path( "{name}" )
+    @Produces( "application/json" )
+    @GET
+    Graph<?, Node> lookupFlowGraph( @PathParam( "name" ) String name );
+
 }
