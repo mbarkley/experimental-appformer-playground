@@ -20,22 +20,28 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jboss.errai.common.client.api.IsElement;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
 import org.kie.appformer.flow.api.AppFlow;
 import org.kie.appformer.flow.api.AppFlowFactory;
 import org.kie.appformer.flow.api.Command;
 import org.kie.appformer.flow.api.CrudOperation;
+import org.kie.appformer.flow.api.Displayer;
 import org.kie.appformer.flow.api.FormOperation;
 import org.kie.appformer.flow.api.Step;
+import org.kie.appformer.flow.api.UIComponent;
 import org.kie.appformer.flow.api.Unit;
 import org.kie.appformer.flowset.interpreter.Interpreter;
+import org.kie.appformer.flowset.interpreter.ModelOracle;
 import org.kie.appformer.formmodeler.rendering.client.flow.FlowProducer;
 import org.kie.appformer.formmodeler.rendering.client.shared.FormModel;
 
@@ -44,16 +50,24 @@ public class FlowInterpreterProducer {
 
     @Inject
     private ManagedInstance<FlowProducer<?, ?, ?, ?, ?>> flowProducerProvider;
+
     @Inject
     private AppFlowFactory                               factory;
 
+    @Inject
+    private ModelOracle                                  modelOracle;
+
+    @Inject
+    private Displayer<IsElement>                         displayer;
+
     @Produces
-    private Interpreter                                  interpreter;
+    private Interpreter<IsElement>                       interpreter;
 
     @SuppressWarnings( { "unchecked", "rawtypes" } )
     @PostConstruct
     private void init() {
         final Map<String, AppFlow<?, ?>> context = new HashMap<>();
+        final Map<String, Supplier<UIComponent<?, ? extends Command<?, ?>, IsElement>>> formSteps = new HashMap<>();
         for ( final FlowProducer<?, ?, ?, ?, ?> producer : flowProducerProvider ) {
             final String entity = producer.getModelType().getSimpleName();
 
@@ -85,6 +99,8 @@ public class FlowInterpreterProducer {
                                 .andThen( (AppFlow) producer.displayMainStandaloneForm() )
                                 .andThen( (Function<Command<FormOperation, FormModel>, Object>) c ->
                                     c.map( formModel -> ((FlowProducer) producer).formModelToModel( formModel ) ) ) );
+
+            formSteps.put( entity, producer::formStepView );
         }
 
         context.put( "toUnit",
@@ -92,9 +108,16 @@ public class FlowInterpreterProducer {
         context.put( "unit",
                      factory.buildFromConstant( Unit.INSTANCE ) );
 
-        interpreter = new Interpreter( context,
-                                       new HashSet<>( Arrays.asList( CrudOperation.class, FormOperation.class ) ),
-                                       factory );
+        final Function<String, Optional<? extends UIComponent<?, ? extends Command<?, ?>, ? extends IsElement>>> stepProvider =
+             name -> Optional.ofNullable( formSteps.get( name ) ).map( s -> s.get() );
+
+        interpreter = new Interpreter<>( context,
+                                         stepProvider,
+                                         displayer,
+                                         modelOracle,
+                                         new HashSet<>( Arrays.asList( CrudOperation.class,
+                                                                       FormOperation.class ) ),
+                                         factory );
     }
 
 }

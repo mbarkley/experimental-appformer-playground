@@ -39,7 +39,7 @@ public class MainPage {
     private Caller<FlowService> flowService;
 
     @Inject
-    private Interpreter interpreter;
+    private Interpreter<?> interpreter;
 
     @Inject
     private AppFlowExecutor executor;
