@@ -75,6 +75,23 @@ public class BindableModelOracle implements ModelOracle {
         }
     }
 
+    @Override
+    public Object workingCopy( final Object model ) {
+        return getProxy( model ).deepUnwrap();
+    }
+
+    @Override
+    public void mergeChanges( final Object original,
+                              final Object copy ) {
+        final BindableProxy<?> originalProxy = getProxy( original );
+        final BindableProxy<?> copyProxy = getProxy( copy );
+        originalProxy
+          .getBeanProperties()
+          .forEach( (property, type) -> {
+              setProperty( original, property, getProperty( copyProxy, property ) );
+          } );
+    }
+
     private BindableProxy<?> getProxy( final Object model ) {
         return (BindableProxy<?>) BindableProxyFactory.getBindableProxy( model );
     }
