@@ -16,6 +16,8 @@
 
 package demo.client.local.builtin;
 
+import static org.jboss.errai.common.client.dom.DOMUtil.removeFromParent;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,6 +27,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -44,6 +47,7 @@ import org.kie.appformer.flowset.interpreter.Interpreter;
 import org.kie.appformer.flowset.interpreter.ModelOracle;
 import org.kie.appformer.formmodeler.rendering.client.flow.FlowProducer;
 import org.kie.appformer.formmodeler.rendering.client.shared.FormModel;
+import org.kie.appformer.formmodeler.rendering.client.view.FormStepWrapper;
 
 @Singleton
 public class FlowInterpreterProducer {
@@ -58,16 +62,16 @@ public class FlowInterpreterProducer {
     private ModelOracle                                  modelOracle;
 
     @Inject
-    private Displayer<IsElement>                         displayer;
+    private Event<IsElement>                             event;
 
     @Produces
-    private Interpreter<IsElement>                       interpreter;
+    private Interpreter<FormStepWrapper<?, ?, ?>>        interpreter;
 
     @SuppressWarnings( { "unchecked", "rawtypes" } )
     @PostConstruct
     private void init() {
         final Map<String, AppFlow<?, ?>> context = new HashMap<>();
-        final Map<String, Supplier<UIComponent<?, ? extends Command<?, ?>, IsElement>>> formSteps = new HashMap<>();
+        final Map<String, Supplier<UIComponent<?, ? extends Command<?, ?>, ? extends FormStepWrapper<?, ?, ?>>>> formSteps = new HashMap<>();
         for ( final FlowProducer<?, ?, ?, ?, ?> producer : flowProducerProvider ) {
             final String entity = producer.getModelType().getSimpleName();
 
@@ -108,16 +112,30 @@ public class FlowInterpreterProducer {
         context.put( "unit",
                      factory.buildFromConstant( Unit.INSTANCE ) );
 
-        final Function<String, Optional<? extends UIComponent<?, ? extends Command<?, ?>, ? extends IsElement>>> stepProvider =
+        final Function<String, Optional<? extends UIComponent<?, ? extends Command<?, ?>, ? extends FormStepWrapper<?, ?, ?>>>> stepProvider =
              name -> Optional.ofNullable( formSteps.get( name ) ).map( s -> s.get() );
 
-        interpreter = new Interpreter<>( context,
+        interpreter = new Interpreter( context,
                                          stepProvider,
-                                         displayer,
+                                         new FormStepDisplayer(),
                                          modelOracle,
                                          new HashSet<>( Arrays.asList( CrudOperation.class,
                                                                        FormOperation.class ) ),
                                          factory );
+    }
+
+    private class FormStepDisplayer implements Displayer<FormStepWrapper<?, ?, ?>> {
+
+        @Override
+        public void show( final UIComponent<?, ?, FormStepWrapper<?, ?, ?>> uiComponent ) {
+            event.fire( uiComponent.asComponent() );
+        }
+
+        @Override
+        public void hide( final UIComponent<?, ?, FormStepWrapper<?, ?, ?>> uiComponent ) {
+            removeFromParent( uiComponent.asComponent().getElement() );
+        }
+
     }
 
 }

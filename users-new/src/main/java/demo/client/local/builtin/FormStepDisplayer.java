@@ -26,20 +26,21 @@ import javax.inject.Inject;
 import org.jboss.errai.common.client.api.IsElement;
 import org.kie.appformer.flow.api.Displayer;
 import org.kie.appformer.flow.api.UIComponent;
+import org.kie.appformer.formmodeler.rendering.client.view.FormStepWrapper;
 
 @Dependent
-public class FormStepDisplayer implements Displayer<IsElement> {
+public class FormStepDisplayer implements Displayer<FormStepWrapper<?, ?, ?>> {
 
     @Inject
     private Event<IsElement> event;
 
     @Override
-    public void show( final UIComponent<?, ?, IsElement> uiComponent ) {
+    public void show( final UIComponent<?, ?, FormStepWrapper<?, ?, ?>> uiComponent ) {
         event.fire( uiComponent.asComponent() );
     }
 
     @Override
-    public void hide( final UIComponent<?, ?, IsElement> uiComponent ) {
+    public void hide( final UIComponent<?, ?, FormStepWrapper<?, ?, ?>> uiComponent ) {
         removeFromParent( uiComponent.asComponent().getElement() );
     }
 
