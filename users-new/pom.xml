@@ -54,7 +54,7 @@
     </pluginRepository>
   </pluginRepositories>
   <properties>
-    <version.org.kie>7.0.0-SNAPSHOT</version.org.kie>
+    <version.org.kie>7.1.0-SNAPSHOT</version.org.kie>
     <hibernate.validator.version>4.1.0.Final</hibernate.validator.version>
     <hibernate.version>4.2.21.Final</hibernate.version>
     <validation.api.version>1.0.0.GA</validation.api.version>
