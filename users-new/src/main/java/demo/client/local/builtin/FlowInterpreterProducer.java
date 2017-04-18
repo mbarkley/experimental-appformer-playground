@@ -81,8 +81,10 @@ public class FlowInterpreterProducer {
                          factory.buildFromStep( producer.update() ) );
             context.put( "Delete" + entity,
                          factory.buildFromStep( producer.delete() ) );
-            context.put( "Load" + entity,
+            context.put( "Load" + entity + "List",
                          factory.buildFromStep( producer.load() ) );
+            context.put( "Lookup" + entity,
+                          factory.buildFromStep( producer.lookup() ) );
 
             context.put( "New" + entity,
                          factory.buildFromSupplier( producer::newModel ) );
