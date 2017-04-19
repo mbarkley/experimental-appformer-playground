@@ -19,6 +19,7 @@ package demo.client.local.builtin;
 import static org.jboss.errai.common.client.dom.DOMUtil.removeFromParent;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -34,6 +35,7 @@ import javax.inject.Singleton;
 
 import org.jboss.errai.common.client.api.IsElement;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
+import org.jboss.errai.ui.nav.client.local.Navigation;
 import org.kie.appformer.flow.api.AppFlow;
 import org.kie.appformer.flow.api.AppFlowFactory;
 import org.kie.appformer.flow.api.Command;
@@ -60,6 +62,9 @@ public class FlowInterpreterProducer {
 
     @Inject
     private ModelOracle                                  modelOracle;
+
+    @Inject
+    private Navigation nav;
 
     @Inject
     private Event<IsElement>                             event;
@@ -109,6 +114,8 @@ public class FlowInterpreterProducer {
             formSteps.put( entity, producer::formStepView );
         }
 
+        context.put( "GetIDFromURL",
+                     factory.buildFromSupplier( this::getIDFromURL ) );
         context.put( "toUnit",
                      factory.buildFromFunction( o -> Unit.INSTANCE ) );
         context.put( "unit",
@@ -124,6 +131,25 @@ public class FlowInterpreterProducer {
                                          new HashSet<>( Arrays.asList( CrudOperation.class,
                                                                        FormOperation.class ) ),
                                          factory );
+    }
+
+    private Long getIDFromURL() {
+        final Collection<String> rawIds = nav.getCurrentState().get( "id" );
+        if ( rawIds.isEmpty() ) {
+            throw new IllegalStateException( "No value specified for [id]." );
+        }
+        else if ( rawIds.size() > 1 ) {
+            throw new IllegalStateException( "Multiple values specified for [id]." );
+        }
+        else {
+            final String rawId = rawIds.iterator().next();
+            try {
+                return Long.parseLong( rawId );
+            }
+            catch ( final NumberFormatException e ) {
+                throw new IllegalStateException( "Could not parse number from id value [" + rawId + "].", e );
+            }
+        }
     }
 
     private class FormStepDisplayer implements Displayer<FormStepWrapper<?, ?, ?>> {
