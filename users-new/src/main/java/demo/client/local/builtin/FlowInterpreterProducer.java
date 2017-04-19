@@ -42,6 +42,7 @@ import org.kie.appformer.flow.api.Command;
 import org.kie.appformer.flow.api.CrudOperation;
 import org.kie.appformer.flow.api.Displayer;
 import org.kie.appformer.flow.api.FormOperation;
+import org.kie.appformer.flow.api.NetworkOperation;
 import org.kie.appformer.flow.api.Step;
 import org.kie.appformer.flow.api.UIComponent;
 import org.kie.appformer.flow.api.Unit;
@@ -89,7 +90,15 @@ public class FlowInterpreterProducer {
             context.put( "Load" + entity + "List",
                          factory.buildFromStep( producer.load() ) );
             context.put( "Lookup" + entity,
-                          factory.buildFromStep( producer.lookup() ) );
+                          factory.buildFromStep( producer.lookup() )
+                                 .andThen( command -> {
+                                     if ( command.commandType.equals( NetworkOperation.FAILURE ) ) {
+                                         throw new RuntimeException( "Unable to load entity." );
+                                     }
+                                     else {
+                                         return command.value;
+                                     }
+                                 } ) );
 
             context.put( "New" + entity,
                          factory.buildFromSupplier( producer::newModel ) );
