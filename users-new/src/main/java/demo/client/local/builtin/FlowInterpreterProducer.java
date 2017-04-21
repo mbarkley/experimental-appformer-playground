@@ -43,13 +43,11 @@ import org.kie.appformer.flow.api.CrudOperation;
 import org.kie.appformer.flow.api.Displayer;
 import org.kie.appformer.flow.api.FormOperation;
 import org.kie.appformer.flow.api.NetworkOperation;
-import org.kie.appformer.flow.api.Step;
 import org.kie.appformer.flow.api.UIComponent;
 import org.kie.appformer.flow.api.Unit;
 import org.kie.appformer.flowset.interpreter.Interpreter;
 import org.kie.appformer.flowset.interpreter.ModelOracle;
 import org.kie.appformer.formmodeler.rendering.client.flow.FlowProducer;
-import org.kie.appformer.formmodeler.rendering.client.shared.FormModel;
 import org.kie.appformer.formmodeler.rendering.client.view.FormStepWrapper;
 
 @Singleton
@@ -81,65 +79,49 @@ public class FlowInterpreterProducer {
         for ( final FlowProducer<?, ?, ?, ?, ?> producer : flowProducerProvider ) {
             final String entity = producer.getModelType().getSimpleName();
 
-            context.put( "Save" + entity,
+            context.put( "Save:" + entity,
                          factory.buildFromStep( producer.save() ) );
-            context.put( "Update" + entity,
+            context.put( "Update:" + entity,
                          factory.buildFromStep( producer.update() ) );
-            context.put( "Delete" + entity,
+            context.put( "Delete:" + entity,
                          factory.buildFromStep( producer.delete() ) );
-            context.put( "Load" + entity + "List",
-                         factory.buildFromStep( producer.load() ) );
-            context.put( "Lookup" + entity,
-                          factory.buildFromStep( producer.lookup() )
-                                 .andThen( command -> {
-                                     if ( command.commandType.equals( NetworkOperation.FAILURE ) ) {
-                                         throw new RuntimeException( "Unable to load entity." );
-                                     }
-                                     else {
-                                         return command.value;
-                                     }
-                                 } ) );
 
-            context.put( "New" + entity,
+            context.put( "New:" + entity,
                          factory.buildFromSupplier( producer::newModel ) );
-
-            final String listViewName = entity + "ListView";
-            context.put( listViewName,
-                         factory.buildFromTransition( input -> {
-                             final Step displayStep = producer.displayMain( producer.listView( true,
-                                                                                               true,
-                                                                                               true ) );
-                             final AppFlow start = factory.buildFromConstant( input );
-                             return start.andThen( displayStep );
+            context.put( "Edit:" + entity,
+                         factory.buildFromSupplier( this::getIDFromURL )
+                         .andThen( producer.lookup() )
+                         .andThen( command -> {
+                             if ( command.commandType.equals( NetworkOperation.FAILURE ) ) {
+                                 throw new RuntimeException( "Unable to load entity." );
+                             }
+                             else {
+                                 return command.value;
+                             }
                          } ) );
-
-            final String formViewName = entity + "FormView";
-            context.put( formViewName,
-                         factory.buildFromFunction( producer::modelToFormModel )
-                                .andThen( (AppFlow) producer.displayMainStandaloneForm() )
-                                .andThen( (Function<Command<FormOperation, FormModel>, Object>) c ->
-                                    c.map( formModel -> ((FlowProducer) producer).formModelToModel( formModel ) ) ) );
+            context.put( "View Table:" + entity,
+                         factory
+                             .buildFromStep( producer.load() )
+                             .andThen( (Supplier) () -> {
+                                 return factory.buildFromStep( producer.displayMain( producer.listView( true, true, true ) ) );
+                             } ) );
 
             formSteps.put( entity, producer::formStepView );
         }
 
-        context.put( "GetIDFromURL",
-                     factory.buildFromSupplier( this::getIDFromURL ) );
-        context.put( "toUnit",
-                     factory.buildFromFunction( o -> Unit.INSTANCE ) );
         context.put( "unit",
-                     factory.buildFromConstant( Unit.INSTANCE ) );
+                     factory.buildFromFunction( o -> Unit.INSTANCE ) );
 
         final Function<String, Optional<? extends UIComponent<?, ? extends Command<?, ?>, ? extends FormStepWrapper<?, ?, ?>>>> stepProvider =
              name -> Optional.ofNullable( formSteps.get( name ) ).map( s -> s.get() );
 
         interpreter = new Interpreter( context,
-                                         stepProvider,
-                                         new FormStepDisplayer(),
-                                         modelOracle,
-                                         new HashSet<>( Arrays.asList( CrudOperation.class,
-                                                                       FormOperation.class ) ),
-                                         factory );
+                                       stepProvider,
+                                       new FormStepDisplayer(),
+                                       modelOracle,
+                                       new HashSet<>( Arrays.asList( CrudOperation.class,
+                                                                     FormOperation.class ) ),
+                                       factory );
     }
 
     private Long getIDFromURL() {
