@@ -7,6 +7,7 @@
         <class>org.kie.appformer.formmodeler.uploads.shared.model.DocumentUpload</class>
         <class>demo.client.shared.Name</class>
         <class>demo.client.shared.Address</class>
+        <class>demo.client.shared.Candidate</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
