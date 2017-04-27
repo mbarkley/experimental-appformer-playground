@@ -7,29 +7,51 @@ package demo.client.shared;
 @javax.persistence.Entity
 public class Address implements java.io.Serializable {
 
-    static final long serialVersionUID = 1L;
+	static final long serialVersionUID = 1L;
 
-    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "ADDRESS_ID_GENERATOR")
-    @javax.persistence.Id
-    @javax.persistence.SequenceGenerator(sequenceName = "ADDRESS_ID_SEQ", name = "ADDRESS_ID_GENERATOR")
-    private java.lang.Long id;
+	@javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO, generator = "ADDRESS_ID_GENERATOR")
+	@javax.persistence.Id
+	@javax.persistence.SequenceGenerator(sequenceName = "ADDRESS_ID_SEQ", name = "ADDRESS_ID_GENERATOR")
+	private java.lang.Long id;
 
-    public Address() {
-    }
-    
-    public Address(java.lang.Long id) {
-        this.id = id;
-    }
+	@org.kie.api.definition.type.Label(value = "Street Name")
+	private java.lang.String street;
 
-    public java.lang.Long getId() {
-        return this.id;
-    }
-    
-    public void setId(java.lang.Long id) {
-        this.id = id;
-    }
+	@org.kie.api.definition.type.Label(value = "Street #")
+	private java.lang.String num;
 
+	public Address() {
+	}
 
+	public java.lang.Long getId() {
+		return this.id;
+	}
 
+	public void setId(java.lang.Long id) {
+		this.id = id;
+	}
+
+	public java.lang.String getStreet() {
+		return this.street;
+	}
+
+	public void setStreet(java.lang.String street) {
+		this.street = street;
+	}
+
+	public java.lang.String getNum() {
+		return this.num;
+	}
+
+	public void setNum(java.lang.String num) {
+		this.num = num;
+	}
+
+	public Address(java.lang.Long id, java.lang.String street,
+			java.lang.String num) {
+		this.id = id;
+		this.street = street;
+		this.num = num;
+	}
 
 }
