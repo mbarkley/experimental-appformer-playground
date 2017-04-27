@@ -16,7 +16,7 @@ import org.jboss.errai.ui.shared.api.annotations.DataField;
 import demo.client.shared.Address;
 import demo.client.shared.AddressFormModel;
 import demo.client.local.AddressFormView;
-import org.gwtbootstrap3.client.ui.TextBox;
+import org.gwtbootstrap3.client.ui.TextArea;
 import javax.inject.Inject;
 import org.jboss.errai.ui.shared.api.annotations.Bound;
 
@@ -33,7 +33,7 @@ public class CandidateFormView extends FormView<Candidate, CandidateFormModel> {
 	@Inject
 	@Bound(property = "candidate.notes")
 	@DataField
-	private TextBox candidate_notes;
+	private TextArea candidate_notes;
 
 	@Override
 	protected void initForm() {
