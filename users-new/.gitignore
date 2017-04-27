@@ -1,0 +1,10 @@
+/target/
+.errai/
+.settings/
+src/main/webapp/WEB-INF/classes/
+.classpath
+.project
+.idea
+.niogit/
+src/main/gwt-unitCache/
+src/main/webapp/app/
